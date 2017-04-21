@@ -1,0 +1,24 @@
+import com.acn.hps.aops.rules.engine.srv.test.util.SampleDataModel.Message;
+global java.util.Map globalInputData;
+global java.util.Map globalOutputData;
+
+rule "GoodBye"
+    when
+        a : Message( status == Message.GOODBYE, myMessage : message )        
+    then  
+        a.setStatus( Message.TEST );        
+end
+ 
+rule "Hello World"
+    when
+        m : Message( status == Message.HELLO, myMessage : message)        
+    then    
+        Message m2 = new Message();
+        m2.setStatus(Message.TEST);
+        m2.setMessag("DE : MY LIST MESSAGE");
+                
+        globalOutputData.put("Val1", m2);
+        m.setMessage( "Goodbye cruel world" );
+        m.setStatus( Message.GOODBYE );        
+        update( m );
+end
